@@ -76,7 +76,7 @@ public class GameManager : Singleton<GameManager>
     void Start()
     {
         playButton.gameObject.SetActive(false);
-        //ShowMenu();
+        ShowMenu();
     }
     
     IEnumerator spawn()
@@ -194,7 +194,7 @@ public class GameManager : Singleton<GameManager>
                 totalEnemies = 3;
                 totalEscaped = 0;
                 totalMoney = 10;
-                //TowerManager.Instance.DestroyAllTowers();
+                TowerManager.Instance.DestroyAllTower();
                 TowerManager.Instance.RenameTagsBuildSites();
                 totalMoneyLabel.text = TotalMoney.ToString();
                 totalEscapedLabel.text = "Escaped " + totalEscaped + "/10";

@@ -35,7 +35,7 @@ public class TowerManager : Singleton<TowerManager>
 
             //Check to see if mouse press location is on buildSites
 
-            if (hit.collider.CompareTag("buildSite"))
+            if (hit.collider != null && hit.collider.CompareTag("buildSite"))
             {
                 buildTile = hit.collider;
                 buildTile.tag = "buildSiteFull"; //This prevents us from stacking towers ontop of each other.
