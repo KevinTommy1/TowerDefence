@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,11 +15,11 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private int totalWaves = 10;
     [SerializeField]
-    private Text totalMoneyLabel;   //Refers to money label at upper left corner
+    private TMP_Text totalMoneyLabel;   //Refers to money label at upper left corner
     [SerializeField]
-    private Text currentWaveLabel;
+    private TMP_Text currentWaveLabel;
     [SerializeField]
-    private Text totalEscapedLabel;
+    private TMP_Text totalEscapedLabel;
     [SerializeField]
     private GameObject spawnPoint;
     [SerializeField]
@@ -30,7 +29,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private int enemiesPerSpawn;
     [SerializeField]
-    private Text playButtonLabel;
+    private TMP_Text playButtonLabel;
     [SerializeField]
     private Button playButton;
 

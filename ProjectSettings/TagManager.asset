@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Spawn
   - checkpoint
+  - buildSite
+  - buildSiteFull
   layers:
   - Default
   - TransparentFX

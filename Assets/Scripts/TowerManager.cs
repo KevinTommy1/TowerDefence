@@ -44,7 +44,7 @@ public class TowerManager : Singleton<TowerManager>
             }
         }
 
-        //When we have a sprite enabled, have it follow the mouse (I.E - Placing a Tower)
+        //When we have a sprite enabled, have it follow the mouse (Like - Placing a Tower)
         if (spriteRenderer.enabled)
         {
             followMouse();
