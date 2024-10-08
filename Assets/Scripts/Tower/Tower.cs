@@ -47,10 +47,7 @@ public class Tower : MonoBehaviour
                 targetEnemy = null;
             }
         }
-    }
-
-    void FixedUpdate()
-    {
+        
         if (isAttacking)
         {
             Attack();
