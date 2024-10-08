@@ -5,31 +5,26 @@ using UnityEngine.UI;
 
 public enum gameStatus
 {
-    next, play, gameover, win
+    next,
+    play,
+    gameover,
+    win
 }
-public class GameManager : Singleton<GameManager> {
+
+public class GameManager : Singleton<GameManager>
+{
     //SerializeField - Allows Inspector to get access to private fields.
     //If we want to get access to this from another class, we'll just need to make public getters
-    [SerializeField]
-    private int totalWaves = 10;
-    [SerializeField]
-    private Text totalMoneyLabel;   //Refers to money label at upper left corner
-    [SerializeField]
-    private Text currentWaveLabel;
-    [SerializeField]
-    private Text totalEscapedLabel;
-    [SerializeField]
-    private GameObject spawnPoint;
-    [SerializeField]
-    private Enemy[] enemies;
-    [SerializeField]
-    private int totalEnemies = 3;
-    [SerializeField]
-    private int enemiesPerSpawn;
-    [SerializeField]
-    private Text playButtonLabel;
-    [SerializeField]
-    private Button playButton;
+    [SerializeField] private int totalWaves = 10;
+    [SerializeField] private Text totalMoneyLabel; //Refers to money label at upper left corner
+    [SerializeField] private Text currentWaveLabel;
+    [SerializeField] private Text totalEscapedLabel;
+    [SerializeField] private GameObject spawnPoint;
+    [SerializeField] private Enemy[] enemies;
+    [SerializeField] private int totalEnemies = 3;
+    [SerializeField] private int enemiesPerSpawn;
+    [SerializeField] private Text playButtonLabel;
+    [SerializeField] private Button playButton;
 
     private int waveNumber = 0;
     private int totalMoney = 10;
@@ -59,12 +54,13 @@ public class GameManager : Singleton<GameManager> {
         get { return totalEscaped; }
         set { totalEscaped = value; }
     }
- 
+
     public int RoundEscaped
     {
         get { return roundEscaped; }
         set { roundEscaped = value; }
     }
+
     public int TotalKilled
     {
         get { return totalKilled; }
@@ -75,18 +71,20 @@ public class GameManager : Singleton<GameManager> {
     {
         get { return audioSource; }
     }
-    
+
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         playButton.gameObject.SetActive(false);
         audioSource = GetComponent<AudioSource>();
         ShowMenu();
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         handleEscape();
-	}
+    }
 
     //This will spawn enemies, wait for the given spawnDelay then call itself again to spawn another enemy
     IEnumerator spawn()
@@ -101,6 +99,7 @@ public class GameManager : Singleton<GameManager> {
                     newEnemy.transform.position = spawnPoint.transform.position;
                 }
             }
+
             yield return new WaitForSeconds(spawnDelay);
             StartCoroutine(spawn());
         }
@@ -111,19 +110,22 @@ public class GameManager : Singleton<GameManager> {
     {
         EnemyList.Add(enemy);
     }
+
     ///Unregister - When they escape the screen
     public void UnregisterEnemy(Enemy enemy)
     {
         EnemyList.Remove(enemy);
         Destroy(enemy.gameObject);
     }
+
     ///Destroy - At the end of the wave
     public void DestroyAllEnemies()
     {
-        foreach(Enemy enemy in EnemyList)
+        foreach (Enemy enemy in EnemyList)
         {
             Destroy(enemy.gameObject);
         }
+
         EnemyList.Clear();
     }
 
@@ -142,26 +144,26 @@ public class GameManager : Singleton<GameManager> {
         totalEscapedLabel.text = "Escaped " + TotalEscape + "/10";
         if (RoundEscaped + TotalKilled == totalEnemies)
         {
-            if(waveNumber <= enemies.Length)
+            if (waveNumber <= enemies.Length)
             {
                 enemiesToSpawn = waveNumber;
             }
+
             setCurrentGameState();
-            ShowMenu();
         }
     }
 
     public void setCurrentGameState()
     {
-        if(totalEscaped >= 10)
+        if (totalEscaped >= 10)
         {
             currentState = gameStatus.gameover;
         }
-        else if(waveNumber == 0 && (TotalKilled + RoundEscaped) == 0)
+        else if (waveNumber == 0 && (TotalKilled + RoundEscaped) == 0)
         {
             currentState = gameStatus.play;
         }
-        else if(waveNumber >= totalWaves)
+        else if (waveNumber >= totalWaves)
         {
             currentState = gameStatus.win;
         }
@@ -169,6 +171,8 @@ public class GameManager : Singleton<GameManager> {
         {
             currentState = gameStatus.next;
         }
+
+        ShowMenu();
     }
 
     public void ShowMenu()
@@ -189,8 +193,10 @@ public class GameManager : Singleton<GameManager> {
                 playButtonLabel.text = "Play";
                 break;
         }
+
         playButton.gameObject.SetActive(true);
     }
+
     public void playButtonPressed()
     {
         Debug.Log("Play Button Pressed");
@@ -211,6 +217,7 @@ public class GameManager : Singleton<GameManager> {
                 AudioSource.PlayOneShot(SoundManager.Instance.NewGame);
                 break;
         }
+
         DestroyAllEnemies();
         TotalKilled = 0;
         RoundEscaped = 0;
@@ -218,6 +225,7 @@ public class GameManager : Singleton<GameManager> {
         StartCoroutine(spawn());
         playButton.gameObject.SetActive(false);
     }
+
     private void handleEscape()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -226,5 +234,4 @@ public class GameManager : Singleton<GameManager> {
             TowerManager.Instance.towerButtonPressed = null;
         }
     }
-
 }

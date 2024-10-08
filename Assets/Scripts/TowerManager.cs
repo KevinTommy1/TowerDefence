@@ -34,13 +34,12 @@ public class TowerManager : Singleton<TowerManager>
             RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
 
             //Check to see if mouse press location is on buildSites
-            
-            if(hit.collider.CompareTag("buildSite"))
+
+            if (hit.collider.CompareTag("buildSite"))
             {
                 buildTile = hit.collider; //This prevents us from stacking towers ontop of each other.
                 RegisterBuildSite(buildTile);
                 placeTower(hit);
-                
             }
         }
 

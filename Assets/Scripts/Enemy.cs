@@ -2,21 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour {
+public class Enemy : MonoBehaviour
+{
     private static readonly int DidDie = Animator.StringToHash("didDie");
 
     //SerializeField - Allows Inspector to get access to private fields.
     //If we want to get access to this from another class, we'll just need to make public getters
-    [SerializeField]
-    private Transform exitPoint;
-    [SerializeField]
-    private Transform[] wayPoints;
-    [SerializeField]
-    private float navigationUpdate;
-    [SerializeField]
-    private int healthPoints;
-    [SerializeField]
-    private int rewardAmount;
+    [SerializeField] private Transform exitPoint;
+    [SerializeField] private Transform[] wayPoints;
+    [SerializeField] private float navigationUpdate;
+    [SerializeField] private int healthPoints;
+    [SerializeField] private int rewardAmount;
 
     private int target = 0;
     private Transform enemy;
@@ -30,25 +26,27 @@ public class Enemy : MonoBehaviour {
         get { return isDead; }
     }
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         enemy = GetComponent<Transform>();
         enemyCollider = GetComponent<Collider2D>();
         anim = GetComponent<Animator>();
         GameManager.Instance.RegisterEnemy(this);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		if (wayPoints != null && !isDead)
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (wayPoints != null && !isDead)
         {
             //Lets use change how fast the update occurs
             navigationTime += Time.deltaTime;
-            if(navigationTime > navigationUpdate)
+            if (navigationTime > navigationUpdate)
             {
                 //If enemy is not at the last wayPoint, keep moving towards the wayPoint
                 //otherwise move to the exitPoint
-                if(target < wayPoints.Length)
+                if (target < wayPoints.Length)
                 {
                     enemy.position = Vector2.MoveTowards(enemy.position, wayPoints[target].position, navigationTime);
                 }
@@ -56,10 +54,11 @@ public class Enemy : MonoBehaviour {
                 {
                     enemy.position = Vector2.MoveTowards(enemy.position, exitPoint.position, navigationTime);
                 }
+
                 navigationTime = 0;
             }
         }
-	}
+    }
 
     //If we trigger the collider2D.tag for checkpoints for finish. 
     //If it hits the checkpoints, increase the index and move to the next checkpoint
@@ -75,16 +74,20 @@ public class Enemy : MonoBehaviour {
             GameManager.Instance.UnregisterEnemy(this);
             GameManager.Instance.isWaveOver();
         }
-        else if(collider2D.CompareTag("projectile"))
+        else if (collider2D.CompareTag("projectile"))
         {
             Projectile newP = collider2D.gameObject.GetComponent<Projectile>();
-            enemyHit(newP.AttackStrength);
-            Destroy(collider2D.gameObject);
+            if (newP != null)
+            {
+                enemyHit(newP.AttackStrength);
+                Destroy(collider2D.gameObject);
+            }
         }
     }
+
     public void enemyHit(int hitPoints)
     {
-        if(healthPoints - hitPoints > 0)
+        if (healthPoints - hitPoints > 0)
         {
             healthPoints -= hitPoints;
             anim.Play("Hurt");
