@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,18 +7,17 @@ public enum gameStatus
 {
     next, play, gameover, win
 }
-public class GameManager : Singleton<GameManager>
-{
+public class GameManager : Singleton<GameManager> {
     //SerializeField - Allows Inspector to get access to private fields.
     //If we want to get access to this from another class, we'll just need to make public getters
     [SerializeField]
     private int totalWaves = 10;
     [SerializeField]
-    private TMP_Text totalMoneyLabel;   //Refers to money label at upper left corner
+    private Text totalMoneyLabel;   //Refers to money label at upper left corner
     [SerializeField]
-    private TMP_Text currentWaveLabel;
+    private Text currentWaveLabel;
     [SerializeField]
-    private TMP_Text totalEscapedLabel;
+    private Text totalEscapedLabel;
     [SerializeField]
     private GameObject spawnPoint;
     [SerializeField]
@@ -29,7 +27,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private int enemiesPerSpawn;
     [SerializeField]
-    private TMP_Text playButtonLabel;
+    private Text playButtonLabel;
     [SerializeField]
     private Button playButton;
 
@@ -45,7 +43,7 @@ public class GameManager : Singleton<GameManager>
 
     public List<Enemy> EnemyList = new List<Enemy>();
     const float spawnDelay = 2f; //Spawn Delay in seconds
-    
+
     public int TotalMoney
     {
         get { return totalMoney; }
@@ -73,12 +71,24 @@ public class GameManager : Singleton<GameManager>
         set { totalKilled = value; }
     }
 
-    void Start()
+    public AudioSource AudioSource
     {
-        playButton.gameObject.SetActive(false);
-        ShowMenu();
+        get { return audioSource; }
     }
     
+    // Use this for initialization
+    void Start () {
+        playButton.gameObject.SetActive(false);
+        audioSource = GetComponent<AudioSource>();
+        ShowMenu();
+	}
+	
+	// Update is called once per frame
+	void Update () {
+        handleEscape();
+	}
+
+    //This will spawn enemies, wait for the given spawnDelay then call itself again to spawn another enemy
     IEnumerator spawn()
     {
         if (enemiesPerSpawn > 0 && EnemyList.Count < totalEnemies)
@@ -95,7 +105,8 @@ public class GameManager : Singleton<GameManager>
             StartCoroutine(spawn());
         }
     }
-    
+
+    ///Register - when enemy spawns
     public void RegisterEnemy(Enemy enemy)
     {
         EnemyList.Add(enemy);
@@ -115,7 +126,7 @@ public class GameManager : Singleton<GameManager>
         }
         EnemyList.Clear();
     }
-    
+
     public void AddMoney(int amount)
     {
         TotalMoney += amount;
@@ -139,7 +150,7 @@ public class GameManager : Singleton<GameManager>
             ShowMenu();
         }
     }
-    
+
     public void setCurrentGameState()
     {
         if(totalEscaped >= 10)
@@ -159,14 +170,14 @@ public class GameManager : Singleton<GameManager>
             currentState = gameStatus.next;
         }
     }
-    
+
     public void ShowMenu()
     {
         switch (currentState)
         {
             case gameStatus.gameover:
                 playButtonLabel.text = "Play Again!";
-                //AudioSource.PlayOneShot(SoundManager.Instance.Gameover);
+                AudioSource.PlayOneShot(SoundManager.Instance.Gameover);
                 break;
             case gameStatus.next:
                 playButtonLabel.text = "Next Wave";
@@ -180,8 +191,7 @@ public class GameManager : Singleton<GameManager>
         }
         playButton.gameObject.SetActive(true);
     }
-
-    public void PlayButtonPressed()
+    public void playButtonPressed()
     {
         Debug.Log("Play Button Pressed");
         switch (currentState)
@@ -193,12 +203,12 @@ public class GameManager : Singleton<GameManager>
             default:
                 totalEnemies = 3;
                 totalEscaped = 0;
-                totalMoney = 10;
+                TotalMoney = 10;
                 TowerManager.Instance.DestroyAllTower();
                 TowerManager.Instance.RenameTagsBuildSites();
                 totalMoneyLabel.text = TotalMoney.ToString();
                 totalEscapedLabel.text = "Escaped " + totalEscaped + "/10";
-                // AudioSource.PlayOneShot(SoundManager.Instance.NewGame);
+                AudioSource.PlayOneShot(SoundManager.Instance.NewGame);
                 break;
         }
         DestroyAllEnemies();
@@ -208,4 +218,13 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine(spawn());
         playButton.gameObject.SetActive(false);
     }
+    private void handleEscape()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            TowerManager.Instance.disableDragSprite();
+            TowerManager.Instance.towerButtonPressed = null;
+        }
+    }
+
 }

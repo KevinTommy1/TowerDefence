@@ -34,17 +34,17 @@ public class TowerManager : Singleton<TowerManager>
             RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
 
             //Check to see if mouse press location is on buildSites
-
-            if (hit.collider != null && hit.collider.CompareTag("buildSite"))
+            
+            if(hit.collider.CompareTag("buildSite"))
             {
-                buildTile = hit.collider;
-                buildTile.tag = "buildSiteFull"; //This prevents us from stacking towers ontop of each other.
+                buildTile = hit.collider; //This prevents us from stacking towers ontop of each other.
                 RegisterBuildSite(buildTile);
                 placeTower(hit);
+                
             }
         }
 
-        //When we have a sprite enabled, have it follow the mouse (Like - Placing a Tower)
+        //When we have a sprite enabled, have it follow the mouse (I.E - Placing a Tower)
         if (spriteRenderer.enabled)
         {
             followMouse();
@@ -91,9 +91,11 @@ public class TowerManager : Singleton<TowerManager>
             Tower newTower = Instantiate(towerButtonPressed.TowerObject);
             newTower.transform.position = hit.transform.position;
             buyTower(towerButtonPressed.TowerPrice);
-            //GameManager.Instance.AudioSource.PlayOneShot(SoundManager.Instance.TowerBuilt);
+            GameManager.Instance.AudioSource.PlayOneShot(SoundManager.Instance.TowerBuilt);
             RegisterTower(newTower);
             disableDragSprite();
+            Instance.towerButtonPressed = null;
+            buildTile.tag = "buildSiteFull";
         }
     }
 

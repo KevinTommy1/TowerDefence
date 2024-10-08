@@ -24,8 +24,7 @@ public class Tower : MonoBehaviour
         if (targetEnemy == null || targetEnemy.IsDead)
         {
             Enemy closestEnemy = GetClosestEnemyInRange();
-            if (closestEnemy != null && Vector2.Distance(transform.localPosition, closestEnemy.transform.position) <=
-                attackRange)
+            if (closestEnemy != null && Vector2.Distance(transform.localPosition, closestEnemy.transform.position) <= attackRange)
             {
                 targetEnemy = closestEnemy;
             }
@@ -66,15 +65,15 @@ public class Tower : MonoBehaviour
 
         if (newProjectile.ProjectileType == ProjectileType.arrow)
         {
-            //GameManager.Instance.AudioSource.PlayOneShot(SoundManager.Instance.Arrow);
+            GameManager.Instance.AudioSource.PlayOneShot(SoundManager.Instance.Arrow);
         }
         else if (newProjectile.ProjectileType == ProjectileType.fireball)
         {
-            //GameManager.Instance.AudioSource.PlayOneShot(SoundManager.Instance.Fireball);
+            GameManager.Instance.AudioSource.PlayOneShot(SoundManager.Instance.Fireball);
         }
         else if (newProjectile.ProjectileType == ProjectileType.rock)
         {
-            //GameManager.Instance.AudioSource.PlayOneShot(SoundManager.Instance.Rock);
+            GameManager.Instance.AudioSource.PlayOneShot(SoundManager.Instance.Rock);
         }
 
         //If we have a target enemy, start a coroutine to shoot projectile to target enemy
@@ -139,6 +138,7 @@ public class Tower : MonoBehaviour
                 }
             }
         }
+
         return enemiesInRange;
     }
 
