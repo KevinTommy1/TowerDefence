@@ -213,6 +213,7 @@ public class GameManager : Singleton<GameManager>
                 TowerManager.Instance.DestroyAllTower();
                 TowerManager.Instance.RenameTagsBuildSites();
                 totalMoneyLabel.text = TotalMoney.ToString();
+                waveNumber = 0;
                 totalEscapedLabel.text = "Escaped " + totalEscaped + "/10";
                 AudioSource.PlayOneShot(SoundManager.Instance.NewGame);
                 break;
