@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 public class TowerManager : Singleton<TowerManager>
 {
-    public TowerButton towerButtonPressed { get; set; }
     private SpriteRenderer spriteRenderer; //Setting image to our tower
     private List<Tower> TowerList = new List<Tower>();
     private List<Collider2D> BuildList = new List<Collider2D>();
     private Collider2D buildTile;
-
+    
+    public TowerButton towerButtonPressed { get; set; }
     // Use this for initialization
     void Start()
     {

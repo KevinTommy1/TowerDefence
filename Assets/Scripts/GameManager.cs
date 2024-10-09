@@ -37,7 +37,7 @@ public class GameManager : Singleton<GameManager>
     private AudioSource audioSource;
 
     public List<Enemy> EnemyList = new List<Enemy>();
-    const float spawnDelay = 2f; //Spawn Delay in seconds
+    const float SpawnDelay = 2f; //Spawn Delay in seconds
 
     public int TotalMoney
     {
@@ -100,7 +100,7 @@ public class GameManager : Singleton<GameManager>
                 }
             }
 
-            yield return new WaitForSeconds(spawnDelay);
+            yield return new WaitForSeconds(SpawnDelay);
             StartCoroutine(spawn());
         }
     }
