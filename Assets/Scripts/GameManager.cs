@@ -83,11 +83,11 @@ public class GameManager : Singleton<GameManager>
     // Update is called once per frame
     void Update()
     {
-        handleEscape();
+        HandleEscape();
     }
 
     //This will spawn enemies, wait for the given spawnDelay then call itself again to spawn another enemy
-    IEnumerator spawn()
+    IEnumerator Spawn()
     {
         if (enemiesPerSpawn > 0 && EnemyList.Count < totalEnemies)
         {
@@ -101,7 +101,7 @@ public class GameManager : Singleton<GameManager>
             }
 
             yield return new WaitForSeconds(SpawnDelay);
-            StartCoroutine(spawn());
+            StartCoroutine(Spawn());
         }
     }
 
@@ -139,7 +139,7 @@ public class GameManager : Singleton<GameManager>
         TotalMoney -= amount;
     }
 
-    public void isWaveOver()
+    public void IsWaveOver()
     {
         totalEscapedLabel.text = "Escaped " + TotalEscape + "/10";
         if (RoundEscaped + TotalKilled == totalEnemies)
@@ -223,11 +223,11 @@ public class GameManager : Singleton<GameManager>
         TotalKilled = 0;
         RoundEscaped = 0;
         currentWaveLabel.text = "Wave " + (waveNumber + 1);
-        StartCoroutine(spawn());
+        StartCoroutine(Spawn());
         playButton.gameObject.SetActive(false);
     }
 
-    private void handleEscape()
+    private void HandleEscape()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {

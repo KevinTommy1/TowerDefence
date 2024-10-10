@@ -21,10 +21,7 @@ public class Enemy : MonoBehaviour
     private float navigationTime = 0;
     private bool isDead = false;
 
-    public bool IsDead
-    {
-        get { return isDead; }
-    }
+    public bool IsDead => isDead;
 
     // Use this for initialization
     void Start()
@@ -72,20 +69,20 @@ public class Enemy : MonoBehaviour
             GameManager.Instance.RoundEscaped += 1;
             GameManager.Instance.TotalEscape += 1;
             GameManager.Instance.UnregisterEnemy(this);
-            GameManager.Instance.isWaveOver();
+            GameManager.Instance.IsWaveOver();
         }
         else if (collider2D.CompareTag("projectile"))
         {
             Projectile newP = collider2D.gameObject.GetComponent<Projectile>();
             if (newP != null)
             {
-                enemyHit(newP.AttackStrength);
+                EnemyHit(newP.AttackStrength);
                 Destroy(collider2D.gameObject);
             }
         }
     }
 
-    public void enemyHit(int hitPoints)
+    public void EnemyHit(int hitPoints)
     {
         if (healthPoints - hitPoints > 0)
         {
@@ -96,17 +93,17 @@ public class Enemy : MonoBehaviour
         else
         {
             anim.SetTrigger(DidDie);
-            die();
+            Die();
         }
     }
 
-    public void die()
+    public void Die()
     {
         isDead = true;
         enemyCollider.enabled = false;
         GameManager.Instance.TotalKilled += 1;
         GameManager.Instance.AudioSource.PlayOneShot(SoundManager.Instance.Death);
         GameManager.Instance.AddMoney(rewardAmount);
-        GameManager.Instance.isWaveOver();
+        GameManager.Instance.IsWaveOver();
     }
 }
