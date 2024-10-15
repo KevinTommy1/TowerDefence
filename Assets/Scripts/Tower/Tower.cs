@@ -10,11 +10,13 @@ public class Tower : MonoBehaviour
     private Enemy targetEnemy = null;
     private float attackCounter;
     private bool isAttacking = false;
+    private EnemySpawn enemySpawn;
 
     // Use this for initialization
     void Start()
     {
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -23,7 +25,8 @@ public class Tower : MonoBehaviour
         if (targetEnemy == null || targetEnemy.IsDead)
         {
             Enemy closestEnemy = GetClosestEnemyInRange();
-            if (closestEnemy != null && Vector2.Distance(transform.localPosition, closestEnemy.transform.position) <= attackRange)
+            if (closestEnemy != null && Vector2.Distance(transform.localPosition, closestEnemy.transform.position) <=
+                attackRange)
             {
                 targetEnemy = closestEnemy;
             }
@@ -46,7 +49,7 @@ public class Tower : MonoBehaviour
                 targetEnemy = null;
             }
         }
-        
+
         if (isAttacking)
         {
             Attack();
@@ -76,7 +79,7 @@ public class Tower : MonoBehaviour
         if (targetEnemy == null)
         {
             Destroy(newProjectile);
-        }
+        } 
         else
         {
             StartCoroutine(MoveProjectile(newProjectile));
@@ -123,9 +126,9 @@ public class Tower : MonoBehaviour
     {
         List<Enemy> enemiesInRange = new List<Enemy>();
         //Check if enemies are in range
-        if (GameManager.Instance != null && GameManager.Instance.EnemyList != null)
+        if (GameManager.Instance != null && enemySpawn.EnemyList != null)
         {
-            foreach (Enemy enemy in GameManager.Instance.EnemyList)
+            foreach (Enemy enemy in enemySpawn.EnemyList)
             {
                 if (Vector2.Distance(transform.localPosition, enemy.transform.localPosition) <= attackRange &&
                     !enemy.IsDead)

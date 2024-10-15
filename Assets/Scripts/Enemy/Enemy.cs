@@ -29,37 +29,19 @@ public class Enemy : MonoBehaviour
         enemy = GetComponent<Transform>();
         enemyCollider = GetComponent<Collider2D>();
         anim = GetComponent<Animator>();
-        GameManager.Instance.RegisterEnemy(this);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (wayPoints != null && !isDead)
-        {
-            //Lets use change how fast the update occurs
-            navigationTime += Time.deltaTime;
-            if (navigationTime > navigationUpdate)
-            {
-                //If enemy is not at the last wayPoint, keep moving towards the wayPoint
-                //otherwise move to the exitPoint
-                if (target < wayPoints.Length)
-                {
-                    enemy.position = Vector2.MoveTowards(enemy.position, wayPoints[target].position, navigationTime);
-                }
-                else
-                {
-                    enemy.position = Vector2.MoveTowards(enemy.position, exitPoint.position, navigationTime);
-                }
+        if (wayPoints == null || isDead) return;
+        navigationTime += Time.deltaTime;
+        if (!(navigationTime > navigationUpdate)) return;
+        enemy.position = Vector2.MoveTowards(enemy.position, target < wayPoints.Length ? wayPoints[target].position : exitPoint.position, navigationTime);
 
-                navigationTime = 0;
-            }
-        }
+        navigationTime = 0;
     }
 
-    //If we trigger the collider2D.tag for checkpoints for finish. 
-    //If it hits the checkpoints, increase the index and move to the next checkpoint
-    //otherwise enemy is at the finish line and should be destroyed.
     void OnTriggerEnter2D(Collider2D collider2D)
     {
         if (collider2D.CompareTag("checkpoint"))
